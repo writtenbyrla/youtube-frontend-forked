@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const StyledHeader = styled.header`
   position: fixed;
@@ -67,6 +68,10 @@ const StyledHeader = styled.header`
       svg {
         margin-right: 5px;
       }
+
+      a {
+        color: #065fd4;
+      }
     }
   }
 
@@ -114,7 +119,7 @@ const Header = () => {
       <div className="header-end">
         <button>
           <FontAwesomeIcon icon={faUser} />
-          <span>로그인</span>
+          <Link to="/login">로그인</Link>
         </button>
       </div>
     </StyledHeader>

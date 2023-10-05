@@ -4,7 +4,10 @@ import { RouterProvider } from "react-router-dom";
 import Router from "./router";
 import "./assets/reset.css";
 import { Provider } from "react-redux";
-import store from "./store";
+import rootReducer from "./store";
+import { legacy_createStore as createStore } from "redux";
+
+const store = createStore(rootReducer);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
