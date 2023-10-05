@@ -1,11 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { changeField, initializeForm } from "../store/modules/auth";
+import { changeField, initializeForm, login } from "../store/modules/auth";
 import { useEffect } from "react";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const { form } = useSelector(({ auth }) => ({ form: auth.login }));
+  const { form, auth, authError } = useSelector(({ auth }) => ({
+    form: auth.login,
+    auth: auth.auth,
+    authError: auth.authError,
+  }));
 
   const onChange = (e) => {
     const { value, name } = e.target;
@@ -14,12 +18,25 @@ const Login = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    // 구현 예정
+    const { id, password } = form;
+    dispatch(login({ id, password }));
   };
 
   useEffect(() => {
     dispatch(initializeForm("login"));
   }, [dispatch]);
+
+  useEffect(() => {
+    if (authError) {
+      console.log("로그인 실패");
+      console.log(authError);
+      return;
+    }
+    if (auth) {
+      console.log("로그인 성공");
+      console.log(auth);
+    }
+  }, [auth, authError]);
 
   return (
     <div>

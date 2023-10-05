@@ -4,10 +4,12 @@ const instance = axios.create({
   baseURL: "http://localhost:8080/auth/",
 });
 
-export const loginAPI = async (id, password) => {
-  return await instance.post("signin", { id, password });
+export const loginAPI = async (data) => {
+  return await instance.post("signin", data);
 };
 
-export const registerAPI = async (id, password, name) => {
-  return await instance.post("signup", { id, password, name });
+export const registerAPI = async (data) => {
+  console.log("api call!");
+  console.log(data);
+  return await instance.post("signup", data);
 };
