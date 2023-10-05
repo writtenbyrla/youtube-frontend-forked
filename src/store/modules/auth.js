@@ -26,6 +26,7 @@ export const login = createAction(LOGIN, ({ id, password }) => ({
   password,
 }));
 
+// redux-saga : 비동기 처리 때문에 추가
 const registerSaga = createRequestSaga(registerAPI);
 const loginSaga = createRequestSaga(loginAPI);
 export function* authSaga() {
