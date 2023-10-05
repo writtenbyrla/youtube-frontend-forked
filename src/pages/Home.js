@@ -131,6 +131,7 @@ const MainContent = styled.div`
     }
   }
 `;
+
 const StyledMain = styled.main`
   padding-top: 56px;
   display: flex;
