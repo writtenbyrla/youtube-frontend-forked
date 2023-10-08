@@ -4,7 +4,9 @@ import { faBars, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { userSave, userLogout } from "../store/userSlice";
 
 const StyledHeader = styled.header`
   position: fixed;
@@ -103,6 +105,26 @@ const StyledHeader = styled.header`
 `;
 
 const Header = () => {
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => {
+    return state.user;
+  });
+
+  useEffect(() => {
+    const save = localStorage.getItem("user");
+    if (Object.keys(user).length === 0 && save !== null) {
+      dispatch(userSave(JSON.parse(save)));
+    }
+  }, []);
+
+  const logout = () => {
+    console.log("logout!");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    dispatch(userLogout());
+  };
+
   return (
     <StyledHeader>
       <div className="header-start">
@@ -118,10 +140,14 @@ const Header = () => {
         </button>
       </div>
       <div className="header-end">
-        <button>
-          <FontAwesomeIcon icon={faUser} />
-          <Link to="/login">로그인</Link>
-        </button>
+        {Object.keys(user).length === 0 ? (
+          <button>
+            <FontAwesomeIcon icon={faUser} />
+            <Link to="/login">로그인</Link>
+          </button>
+        ) : (
+          <button onClick={logout}>로그아웃</button>
+        )}
       </div>
     </StyledHeader>
   );

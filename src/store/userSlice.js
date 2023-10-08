@@ -9,10 +9,18 @@ const asyncLogin = createAsyncThunk("userSlice/asyncLogin", async (data) => {
 const userSlice = createSlice({
   name: "loginSlice",
   initialState: {},
-  reducers: {},
+  reducers: {
+    userSave: (state, action) => {
+      return action.payload;
+    },
+    userLogout: (state, action) => {
+      return {};
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(asyncLogin.fulfilled, (state, action) => {
       localStorage.setItem("token", action.payload.token);
+      localStorage.setItem("user", JSON.stringify(action.payload));
       return action.payload;
     });
   },
@@ -20,3 +28,4 @@ const userSlice = createSlice({
 
 export default userSlice;
 export { asyncLogin };
+export const { userSave, userLogout } = userSlice.actions;
