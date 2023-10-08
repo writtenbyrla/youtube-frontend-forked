@@ -1,15 +1,12 @@
-import { combineReducers } from "redux";
-import { all } from "redux-saga/effects";
-import auth, { authSaga } from "./modules/auth";
-import user from "./modules/user";
+import { configureStore } from "@reduxjs/toolkit";
+import commentSlice from "./commentSlice";
+import userSlice from "./userSlice";
 
-const rootReducer = combineReducers({
-  auth,
-  user,
+const store = configureStore({
+  reducer: {
+    comment: commentSlice.reducer,
+    user: userSlice.reducer,
+  },
 });
 
-export function* rootSaga() {
-  yield all([authSaga()]);
-}
-
-export default rootReducer;
+export default store;

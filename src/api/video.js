@@ -5,7 +5,7 @@ const instance = axios.create({
 });
 
 export const getCategories = async () => {
-  return await instance.get("category");
+  return await instance.get("public/category");
 };
 
 export const addVideo = async (data) => {
@@ -13,9 +13,17 @@ export const addVideo = async (data) => {
 };
 
 export const getVideos = async (page, category) => {
-  let url = `video?page=${page}`;
+  let url = `public/video?page=${page}`;
   if (category !== null) {
     url += `&category=${category}`;
   }
   return await instance.get(url);
+};
+
+export const getVideo = async (id) => {
+  return await instance.get("public/video/" + id);
+};
+
+export const getComments = async (id) => {
+  return await instance.get("public/video/" + id + "/comment");
 };

@@ -14,6 +14,7 @@ import { faFolder } from "@fortawesome/free-regular-svg-icons";
 import { useEffect, useState } from "react";
 import { getCategories, getVideos } from "../api/video";
 import { useInView } from "react-intersection-observer";
+import { Link } from "react-router-dom";
 
 const StyledAside = styled.aside`
   display: none;
@@ -227,7 +228,7 @@ const Home = () => {
 
   useEffect(() => {
     categoryAPI();
-    // videoAPI();
+    videoAPI();
     //fetch("http://localhost:8080/api/category")
     //.then((response) => response.json())
     //.then((json) => {
@@ -236,13 +237,13 @@ const Home = () => {
     //});
   }, []);
 
-  useEffect(() => {
-    if (inView) {
-      console.log(`${inView} : 무한 스크롤 요청이 들어가야하는 부분!`);
-      videoAPI();
-      setPage(page + 1);
-    }
-  }, [inView]);
+  // useEffect(() => {
+  //   if (inView) {
+  //     console.log(`${inView} : 무한 스크롤 요청이 들어가야하는 부분!`);
+  //     videoAPI();
+  //     setPage(page + 1);
+  //   }
+  // }, [inView]);
 
   useEffect(() => {
     if (category != null) {
@@ -313,73 +314,37 @@ const Home = () => {
         </nav>
         <section>
           {videos.map((video, index) => (
-            <React.Fragment key={video.videoCode}>
-              {videos.length - 1 === index ? (
-                <a href="#" className="video-content" ref={ref}>
-                  {video.videoCode}
-                  <video
-                    width="100%"
-                    poster={"/upload/" + video.videoPhoto}
-                    autoPlay
-                    loop
-                    controls
-                  >
-                    <source
-                      src={"/upload/" + video.videoUrl}
-                      type="video/mp4"
-                    />
-                  </video>
-                  <div className="video-summary">
-                    <img
-                      src={"/upload/" + video.channel.channelPhoto}
-                      alt="채널이미지"
-                    />
-                    <div className="video-desc">
-                      <h3>{video.videoTitle}</h3>
-                      <p>{video.channel.channelName}</p>
-                      <p>
-                        조회수
-                        <span>{video.videoViews}</span>
-                        회ㆍ
-                        <span>1일</span>전
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              ) : (
-                <a href="#" className="video-content">
-                  {video.videoCode}
-                  <video
-                    width="100%"
-                    poster={"/upload/" + video.videoPhoto}
-                    autoPlay
-                    loop
-                    controls
-                  >
-                    <source
-                      src={"/upload/" + video.videoUrl}
-                      type="video/mp4"
-                    />
-                  </video>
-                  <div className="video-summary">
-                    <img
-                      src={"/upload/" + video.channel.channelPhoto}
-                      alt="채널이미지"
-                    />
-                    <div className="video-desc">
-                      <h3>{video.videoTitle}</h3>
-                      <p>{video.channel.channelName}</p>
-                      <p>
-                        조회수
-                        <span>{video.videoViews}</span>
-                        회ㆍ
-                        <span>1일</span>전
-                      </p>
-                    </div>
-                  </div>
-                </a>
-              )}
-            </React.Fragment>
+            <Link
+              to={"/watch/" + video.videoCode}
+              className="video-content"
+              key={video.videoCode}
+            >
+              <video
+                width="100%"
+                poster={"/upload/" + video.videoPhoto}
+                autoPlay
+                loop
+                controls
+              >
+                <source src={"/upload/" + video.videoUrl} type="video/mp4" />
+              </video>
+              <div className="video-summary">
+                <img
+                  src={"/upload/" + video.channel.channelPhoto}
+                  alt="채널이미지"
+                />
+                <div className="video-desc">
+                  <h3>{video.videoTitle}</h3>
+                  <p>{video.channel.channelName}</p>
+                  <p>
+                    조회수
+                    <span>{video.videoViews}</span>
+                    회ㆍ
+                    <span>1일</span>전
+                  </p>
+                </div>
+              </div>
+            </Link>
           ))}
         </section>
       </MainContent>
