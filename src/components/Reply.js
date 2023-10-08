@@ -1,9 +1,11 @@
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { deleteComment } from "../store/commentSlice";
 
 const Box = styled.div`
-  background-color: pink;
   width: 95%;
   margin: 0 auto;
+  margin-bottom: 15px;
 
   h2 {
     font-weight: bold;
@@ -19,16 +21,17 @@ const Box = styled.div`
 `;
 
 const Reply = ({ reply }) => {
+  const dispatch = useDispatch();
+  const onDelete = () => {
+    dispatch(deleteComment(reply.commentCode));
+  };
   return (
     <Box>
       <h2>@{reply.member.id}</h2>
       <div>
         <span>{reply.commentDesc}</span>
-        <button>삭제</button>
+        <button onClick={onDelete}>삭제</button>
       </div>
-      {/* <div contentEditable="true" suppressContentEditableWarning>
-        {reply.commentDesc}
-      </div> */}
     </Box>
   );
 };

@@ -40,13 +40,32 @@ const commentSlice = createSlice({
       return action.payload;
     });
     builder.addCase(addComment.fulfilled, (state, action) => {
-      state.unshift(action.payload);
+      if (action.payload.commentParent === null) {
+        state.unshift(action.payload);
+      } else {
+        const index = state.findIndex(
+          (comment) => comment.commentCode === action.payload.commentParent
+        );
+        state[index].replies?.push(action.payload);
+      }
     });
     builder.addCase(updateComment.fulfilled, (state, action) => {
       console.log(action.payload);
     });
     builder.addCase(deleteComment.fulfilled, (state, action) => {
-      console.log(action.payload);
+      if (action.payload.commentParent === null) {
+        return state.filter(
+          (item) => item.commentCode !== action.payload.commentCode
+        );
+      } else {
+        const index = state.findIndex(
+          (comment) => comment.commentCode === action.payload.commentParent
+        );
+        const replyIndex = state[index].replies.findIndex(
+          (item) => item.commentCode === action.payload.commentCode
+        );
+        state[index].replies.splice(replyIndex, 1);
+      }
     });
   },
 });

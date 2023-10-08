@@ -42,6 +42,7 @@ const Watch = () => {
 
   return (
     <StyledMain>
+      {/* video는 단순 비디오 1개 정보 가져와서 보여주는 거라 생략 */}
       {JSON.stringify(video, null, 2)}
       <AddComment code={video !== null ? video.videoCode : null} />
       {comments.map((comment) => (

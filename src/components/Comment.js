@@ -2,6 +2,8 @@ import styled from "styled-components";
 import AddComment from "./AddComment";
 import { useState } from "react";
 import Reply from "./Reply";
+import { useDispatch } from "react-redux";
+import { deleteComment } from "../store/commentSlice";
 
 const Box = styled.div`
   width: 95%;
@@ -23,8 +25,12 @@ const Box = styled.div`
 
 const Comment = ({ comment }) => {
   const [isActive, setIsActive] = useState(true);
+  const dispatch = useDispatch();
   const onClick = () => {
     setIsActive(!isActive);
+  };
+  const onDelete = () => {
+    dispatch(deleteComment(comment.commentCode));
   };
   return (
     <Box>
@@ -32,6 +38,7 @@ const Comment = ({ comment }) => {
       <div>
         <span>{comment.commentDesc}</span>
         <button onClick={onClick}>답글</button>
+        <button onClick={onDelete}>삭제</button>
       </div>
       <AddComment
         active={isActive}
