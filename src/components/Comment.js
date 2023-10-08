@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import AddComment from "./AddComment";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Reply from "./Reply";
 import { useDispatch } from "react-redux";
-import { deleteComment } from "../store/commentSlice";
+import { deleteComment, updateComment } from "../store/commentSlice";
 
 const Box = styled.div`
   width: 95%;
@@ -25,10 +25,27 @@ const Box = styled.div`
 
 const Comment = ({ comment }) => {
   const [isActive, setIsActive] = useState(true);
+  const [content, setContent] = useState(comment.commentDesc);
+  const contentRef = useRef(null);
   const dispatch = useDispatch();
   const onClick = () => {
     setIsActive(!isActive);
   };
+
+  const handleBlur = () => {
+    setContent(contentRef.current.innerText);
+  };
+
+  const onUpdate = () => {
+    dispatch(
+      updateComment({
+        commentCode: comment.commentCode,
+        videoCode: comment.videoCode,
+        commentDesc: content,
+      })
+    );
+  };
+
   const onDelete = () => {
     dispatch(deleteComment(comment.commentCode));
   };
@@ -36,8 +53,16 @@ const Comment = ({ comment }) => {
     <Box>
       <h2>@{comment.member.id}</h2>
       <div>
-        <span>{comment.commentDesc}</span>
+        <span
+          contentEditable="true"
+          suppressContentEditableWarning
+          ref={contentRef}
+          onBlur={handleBlur}
+        >
+          {content}
+        </span>
         <button onClick={onClick}>답글</button>
+        <button onClick={onUpdate}>수정</button>
         <button onClick={onDelete}>삭제</button>
       </div>
       <AddComment

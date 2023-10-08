@@ -1,6 +1,7 @@
 import styled from "styled-components";
+import { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { deleteComment } from "../store/commentSlice";
+import { deleteComment, updateComment } from "../store/commentSlice";
 
 const Box = styled.div`
   width: 95%;
@@ -21,15 +22,38 @@ const Box = styled.div`
 `;
 
 const Reply = ({ reply }) => {
+  const [content, setContent] = useState(reply.commentDesc);
+  const contentRef = useRef(null);
   const dispatch = useDispatch();
   const onDelete = () => {
     dispatch(deleteComment(reply.commentCode));
+  };
+  const handleBlur = () => {
+    setContent(contentRef.current.innerText);
+  };
+  const onUpdate = () => {
+    dispatch(
+      updateComment({
+        commentCode: reply.commentCode,
+        videoCode: reply.videoCode,
+        commentDesc: content,
+        commentParent: reply.commentParent,
+      })
+    );
   };
   return (
     <Box>
       <h2>@{reply.member.id}</h2>
       <div>
-        <span>{reply.commentDesc}</span>
+        <span
+          contentEditable="true"
+          suppressContentEditableWarning
+          ref={contentRef}
+          onBlur={handleBlur}
+        >
+          {content}
+        </span>
+        <button onClick={onUpdate}>수정</button>
         <button onClick={onDelete}>삭제</button>
       </div>
     </Box>
