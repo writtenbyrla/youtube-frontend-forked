@@ -11,6 +11,8 @@ import {
 } from "../store/commentSlice";
 import { useSelector, useDispatch } from "react-redux";
 import Reply from "../components/Reply";
+import AddComment from "../components/AddComment";
+import Comment from "../components/Comment";
 
 const StyledMain = styled.main`
   padding-top: 56px;
@@ -38,24 +40,12 @@ const Watch = () => {
     dispatch(viewComments(id));
   }, [dispatch]);
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    const commentDesc = e.target.commentDesc.value;
-    dispatch(addComment({ videoCode: video.videoCode, commentDesc }));
-  };
-
   return (
     <StyledMain>
       {JSON.stringify(video, null, 2)}
-      <form onSubmit={onSubmit}>
-        <input type="text" name="commentDesc" />
-        <input type="submit" value="댓글" />
-      </form>
+      <AddComment code={video !== null ? video.videoCode : null} />
       {comments.map((comment) => (
-        <div key={comment.commentCode}>
-          <div>@{comment.member.id}</div>
-          <div>{comment.commentDesc}</div>
-        </div>
+        <Comment key={comment.commentCode} comment={comment} />
       ))}
     </StyledMain>
   );
