@@ -3,7 +3,12 @@ import { useParams } from "react-router-dom";
 import { getVideo } from "../api/video";
 import { useEffect } from "react";
 import { useState } from "react";
-import { viewComments } from "../store/commentSlice";
+import {
+  viewComments,
+  addComment,
+  updateComment,
+  deleteComment,
+} from "../store/commentSlice";
 import { useSelector, useDispatch } from "react-redux";
 import Reply from "../components/Reply";
 
@@ -33,21 +38,23 @@ const Watch = () => {
     dispatch(viewComments(id));
   }, [dispatch]);
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const commentDesc = e.target.commentDesc.value;
+    dispatch(addComment({ videoCode: video.videoCode, commentDesc }));
+  };
+
   return (
     <StyledMain>
       {JSON.stringify(video, null, 2)}
-      <form>
-        <input type="text" />
+      <form onSubmit={onSubmit}>
+        <input type="text" name="commentDesc" />
         <input type="submit" value="댓글" />
       </form>
       {comments.map((comment) => (
         <div key={comment.commentCode}>
           <div>@{comment.member.id}</div>
           <div>{comment.commentDesc}</div>
-          <div>{JSON.stringify(comment.replies)}</div>
-          {comment.replies.map((reply) => (
-            <Reply key={reply.commentCode} reply={reply} />
-          ))}
         </div>
       ))}
     </StyledMain>

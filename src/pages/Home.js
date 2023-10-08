@@ -208,7 +208,13 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [category, setCategory] = useState(null);
 
-  const [ref, inView] = useInView();
+  const hasScrollbar = () => {
+    return document.documentElement.scrollHeight > window.innerHeight;
+  };
+
+  const [ref, inView] = useInView({
+    skip: !hasScrollbar(), // 스크롤이 없을 경우 skip
+  });
 
   const categoryAPI = async () => {
     const result = await getCategories();
@@ -237,13 +243,13 @@ const Home = () => {
     //});
   }, []);
 
-  // useEffect(() => {
-  //   if (inView) {
-  //     console.log(`${inView} : 무한 스크롤 요청이 들어가야하는 부분!`);
-  //     videoAPI();
-  //     setPage(page + 1);
-  //   }
-  // }, [inView]);
+  useEffect(() => {
+    if (inView) {
+      console.log(`${inView} : 무한 스크롤 요청이 들어가야하는 부분!`);
+      videoAPI();
+      setPage(page + 1);
+    }
+  }, [inView]);
 
   useEffect(() => {
     if (category != null) {
@@ -346,6 +352,7 @@ const Home = () => {
               </div>
             </Link>
           ))}
+          <div ref={ref}></div>
         </section>
       </MainContent>
     </StyledMain>
