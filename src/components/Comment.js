@@ -4,7 +4,6 @@ import { useState, useRef } from "react";
 import Reply from "./Reply";
 import { useDispatch } from "react-redux";
 import { deleteComment, updateComment } from "../store/commentSlice";
-
 const Box = styled.div`
   width: 95%;
   margin: 10px auto;
@@ -32,15 +31,19 @@ const Comment = ({ comment }) => {
     setIsActive(!isActive);
   };
 
+  // span에서 상태 유지 -> content로
   const handleBlur = () => {
     setContent(contentRef.current.innerText);
   };
 
   const onUpdate = () => {
     dispatch(
+      // slice에서 import해온 updateComment임
       updateComment({
+        // 받아온 comment의 코드, 비디오 코드 유지해서 수정
         commentCode: comment.commentCode,
         videoCode: comment.videoCode,
+        // handleBlur통해 content 담은 것을 comment내용에 넣어서 수정
         commentDesc: content,
       })
     );
